@@ -3,10 +3,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class LoginTest {
+public class WishListTests {
     WebDriver driver;
     @Before
     public void initDrive(){
@@ -16,24 +15,27 @@ public class LoginTest {
         driver.get("http://testfasttrackit.info/selenium-test/");
     }
     @Test
-    public void loginWithValidData() {
+    public void wishListSale(){
+        // logare
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
         driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
         driver.findElement(By.id("pass")).sendKeys("123456");
         driver.findElement(By.id("send2")).click();
-        WebElement welcomeTextElement = driver.findElement(By.cssSelector("body > div > div.page > div.main-container.col2-left-layout > div > div.col-main > div.my-account > div > div.welcome-msg > p.hello > strong"));
-        String expectedText = "Hello, Vasile Cristi!";
-        String actualText = welcomeTextElement.getText();
-        if(actualText.equals(expectedText)){
-            System.out.println("S-a logat !");
-        }
-        else System.err.println("Nu s-a logat!");
-        wait(3);
+        //apasa pe SALE
+        driver.findElement(By.cssSelector(".nav-5>a")).click();
+        String title = driver.findElement(By.cssSelector(".page-title h1")).getText();
+        if(title.equals("SALE")){
+            System.out.println("Esti pe pagina Sale");}
+        //apasa pe view details
+        driver.findElement(By.cssSelector(".actions>a[title]")).click();
+        // add to wishlist
+        driver.findElement(By.className("link-wishlist")).click();
 
     }
     @After
     public void quit(){
+        wait(5);
         driver.close();
     }
     public void wait(int seconds){
