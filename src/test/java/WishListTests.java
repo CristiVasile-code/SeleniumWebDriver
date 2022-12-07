@@ -33,6 +33,30 @@ public class WishListTests {
         driver.findElement(By.className("link-wishlist")).click();
 
     }
+    @Test
+    public void removeItem(){
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+        //wait(1);
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("#header-account > div > ul > li:nth-child(2) > a")).click();
+        //driver.findElement(By.cssSelector("[title=\"Remove Item\"]")).click();
+    }
+    @Test
+    public void addToCart(){
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+        //wait(1);
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("#header-account > div > ul > li:nth-child(2) > a")).click();
+        driver.findElement(By.cssSelector(".cart-cell [title=\"Add to Cart\"]")).click();
+    }
     @After
     public void quit(){
         wait(5);
