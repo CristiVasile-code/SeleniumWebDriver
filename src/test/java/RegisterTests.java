@@ -1,4 +1,5 @@
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -21,16 +22,34 @@ public class RegisterTests {
             driver.findElement(By.cssSelector("[title=\"Register\"]")).click();
             driver.findElement(By.id("firstname")).sendKeys("Vasile");
             driver.findElement(By.id("lastname")).sendKeys("Cristi");
-            driver.findElement(By.id("email_address")).sendKeys("cristivasile-code@gmail.com");
+            driver.findElement(By.id("email_address")).sendKeys("cristivasile-code3@gmail.com");
             driver.findElement(By.id("password")).sendKeys("123456");
             driver.findElement(By.id("confirmation")).sendKeys("123456");
             driver.findElement(By.id("is_subscribed")).click();
             driver.findElement(By.cssSelector("[type=\"submit\"][title=\"Register\"]")).click();
+            wait(2);
+            String welcomeText = "Thank you for registering with Madison Island.";
+            String actualText = driver.findElement(By.cssSelector(".success-msg span")).getText();
+            Assert.assertEquals(welcomeText, actualText);
         }
-    @After
-    public void quit(){
-        wait(5);
-        driver.close();
+        @Test
+    public void registerWithExistingUser (){
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("[title=\"Register\"]")).click();
+        driver.findElement(By.id("firstname")).sendKeys("Vasile");
+        driver.findElement(By.id("lastname")).sendKeys("Cristi");
+        driver.findElement(By.id("email_address")).sendKeys("cristivasile-code3@gmail.com");
+        driver.findElement(By.id("password")).sendKeys("123456");
+        driver.findElement(By.id("confirmation")).sendKeys("123456");
+        driver.findElement(By.id("is_subscribed")).click();
+        driver.findElement(By.cssSelector("[type=\"submit\"][title=\"Register\"]")).click();
+        wait(2);
+        String errText = "There is already an account with this email address. If you are sure that it is your email" +
+                " address, click here to get your password and access your account.";
+        String actualText = driver.findElement(By.cssSelector(".error-msg span")).getText();
+            System.out.println(actualText);
+        Assert.assertEquals(errText, actualText);
+
     }
     public void wait(int seconds){
         try{
@@ -38,6 +57,12 @@ public class RegisterTests {
         } catch (InterruptedException e){
             e.printStackTrace();
         }
+    }
+
+    @After
+    public void quit(){
+        wait(5);
+        driver.close();
     }
     }
 

@@ -46,7 +46,7 @@ public class WishListTests {
         //driver.findElement(By.cssSelector("[title=\"Remove Item\"]")).click();
     }
     @Test
-    public void addToCart(){
+    public void addToCartFromWishlist(){
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
         driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
@@ -57,16 +57,17 @@ public class WishListTests {
         driver.findElement(By.cssSelector("#header-account > div > ul > li:nth-child(2) > a")).click();
         driver.findElement(By.cssSelector(".cart-cell [title=\"Add to Cart\"]")).click();
     }
-    @After
-    public void quit(){
-        wait(5);
-        driver.close();
-    }
     public void wait(int seconds){
         try{
             Thread.sleep(seconds*1000L);
         } catch (InterruptedException e){
             e.printStackTrace();
         }
+    }
+
+    @After
+    public void quit(){
+        wait(5);
+        driver.close();
     }
 }
