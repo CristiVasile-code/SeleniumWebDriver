@@ -1,7 +1,4 @@
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -85,22 +82,23 @@ public class AddToCart {
         //click pe remove primul elem
         driver.findElement(By.xpath("//*[@id=\"shopping-cart-table\"]/tbody/tr[1]/td[6]/a")).click();
     }
-    //@Test
-//    public void removeItemFromCartOne(){
-//        //logare
-//        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-//        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-//        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-//        driver.findElement(By.id("pass")).sendKeys("123456");
-//        driver.findElement(By.id("send2")).click();
-//        //navighez la cart
-//        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-//        driver.findElement(By.cssSelector(".top-link-cart")).click();
-//        //click pe remove primul elem
-//        String qty = driver.findElement(By.cssSelector("[name=\"cart[20420][qty]\"]")).getText();
-//        int inte = Integer.valueOf(qty);
-//        System.out.println(inte);
-//    }
+    @Ignore
+    @Test
+    public void removeItemFromCartOne(){
+        //logare
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+        //navighez la cart
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector(".top-link-cart")).click();
+        //click pe remove primul elem
+        String qty = driver.findElement(By.cssSelector("[name=\"cart[20420][qty]\"]")).getText();
+        int inte = Integer.valueOf(qty);
+        System.out.println(inte);
+    }
     @Test
     public void removeAllItemsFromCart(){
         //logare
