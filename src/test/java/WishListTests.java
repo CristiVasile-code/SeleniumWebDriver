@@ -42,7 +42,8 @@ public class WishListTests {
         driver.findElement(By.id("send2")).click();
         //wait(1);
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("#header-account > div > ul > li:nth-child(2) > a")).click();
+        driver.findElement(By.xpath("//*[@id=\"header-account\"]/div/ul/li[2]/a")).click();
+        driver.findElement(By.cssSelector(".btn-remove2")).click();
         //driver.findElement(By.cssSelector("[title=\"Remove Item\"]")).click();
     }
     @Test
