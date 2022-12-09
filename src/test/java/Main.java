@@ -8,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
     //LoginTest login = new LoginTest();
    // login.loginWithValidData();
+        //css selector pt required fields "p.required "
     }
 
 }

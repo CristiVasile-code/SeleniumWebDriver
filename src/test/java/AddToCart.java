@@ -31,12 +31,12 @@ public class AddToCart {
         driver.findElement(By.id("product-collection-image-412")).click();
         driver.findElement(By.id("swatch26")).click();
         driver.findElement(By.id("swatch80")).click();
-        driver.findElement(By.cssSelector("#product_addtocart_form > div.product-shop > div.product-options-bottom > div.add-to-cart > div.add-to-cart-buttons > button")).click();
+        driver.findElement(By.cssSelector(".add-to-cart-buttons>button")).click();
         wait(3);
         String expectedText = "SHOPPING CART";
         String actualText = driver.findElement(By.cssSelector(".page-title h1")).getText();
         Assert.assertEquals(expectedText, actualText);
-       // driver.findElement(By.cssSelector();
+
     }
     @Test
     public void addToCartFromDropDown(){
@@ -116,6 +116,47 @@ public class AddToCart {
         String actualText = driver.findElement(By.cssSelector(".page-title>h1")).getText();
         Assert.assertEquals(expectedText,actualText);
     }
+    @Test
+    public void addToCartFromSearch(){
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+        //scrie "shirt" in search field
+        driver.findElement(By.id("search")).sendKeys("shirt");
+        //click pe iconul de search
+        driver.findElement(By.cssSelector("[title=\"Search\"]")).click();
+        //click pe primul item
+        driver.findElement(By.id("product-collection-image-413")).click();
+        //atribute
+        driver.findElement(By.id("swatch26")).click();
+        driver.findElement(By.id("swatch79")).click();
+        //click pe Add to cart
+        driver.findElement(By.cssSelector(".add-to-cart-buttons button")).click();
+        String expectedText = "SHOPPING CART";
+        String actualText = driver.findElement(By.cssSelector(".page-title>h1")).getText();
+        Assert.assertEquals(expectedText,actualText);
+    }
+    @Test
+    public void checkRequiredFields(){
+        //logare
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+
+        driver.findElement(By.cssSelector(".nav-6 a")).click();
+        driver.findElement(By.id("product-collection-image-412")).click();
+        driver.findElement(By.id("swatch26")).click();
+        //driver.findElement(By.id("swatch80")).click();
+
+        driver.findElement(By.cssSelector(".add-to-cart-buttons>button")).click();
+        //verific daca este afisat textul "Required field"
+        WebElement ReqFields = driver.findElement(By.cssSelector(".validation-advice"));
+        Assert.assertTrue(ReqFields.isDisplayed());
+    }
     public void wait(int seconds){
         try{
             Thread.sleep(seconds*1000L);
@@ -123,7 +164,8 @@ public class AddToCart {
             e.printStackTrace();
         }
     }
-    //@After
+    //imi face probleme partea asta, incetineste tot testul la final
+    @After
     public void quit(){
         driver.close();
     }
