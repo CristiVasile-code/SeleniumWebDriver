@@ -85,7 +85,7 @@ public class AddToCart {
         //click pe remove primul elem
         driver.findElement(By.xpath("//*[@id=\"shopping-cart-table\"]/tbody/tr[1]/td[6]/a")).click();
     }
-    @Ignore
+
     @Test
     public void removeOneItemFromCart(){
         //logare
@@ -109,16 +109,6 @@ public class AddToCart {
         driver.findElement(By.cssSelector("#shopping-cart-table > tbody > tr.last.even > td.product-cart-actions > button")).click();
         Assert.assertTrue("Cantitatea a fost modificata", qtyInteger !=1);}
         else Assert.assertTrue("Cantitatea este 1", qtyInteger ==1);
-//        WebElement welcomeTextElement = driver.findElement(By.cssSelector("body > div > div.page > div.main-container.col2-left-layout > div > div.col-main > div.my-account > div > div.welcome-msg > p.hello > strong"));
-//
-//        String expectedText = "Hello, Cosmin Fast!";
-//        String actualText = welcomeTextElement.getText();
-//
-//        if (actualText.equals(expectedText)){
-//            System.out.println("S-a logat cu success!");
-//        }else
-//            System.err.println("Nu s-a logat. ");
-
     }
     @Test
     public void removeAllItemsFromCart(){
@@ -223,7 +213,7 @@ public class AddToCart {
         }
     }
     //imi face probleme partea asta, incetineste tot testul la final
-    //@After
+    @After
     public void quit(){
         driver.close();
     }
