@@ -27,7 +27,19 @@ public class LoginTest {
         String expectedText = "Hello, Vasile Cristi!";
         String actualText = welcomeTextElement.getText();
         Assert.assertEquals(expectedText, actualText);
-
+    }
+    @Test
+    public void logOut(){
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("[title=\"Log Out\"]")).click();
+        String expectedText = "YOU ARE NOW LOGGED OUT";
+        String actualText = driver.findElement(By.cssSelector(".page-title h1")).getText();
+        Assert.assertEquals(expectedText,actualText);
     }
     public void wait(int seconds){
         try{

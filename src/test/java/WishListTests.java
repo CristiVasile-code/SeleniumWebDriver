@@ -65,7 +65,6 @@ public class WishListTests {
             e.printStackTrace();
         }
     }
-
     @After
     public void quit(){
         wait(5);

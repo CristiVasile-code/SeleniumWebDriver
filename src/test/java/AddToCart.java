@@ -6,6 +6,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.awt.*;
+import java.util.logging.Logger;
+
 public class AddToCart {
     WebDriver driver;
     Actions actions;
@@ -84,7 +87,7 @@ public class AddToCart {
     }
     @Ignore
     @Test
-    public void removeItemFromCartOne(){
+    public void removeOneItemFromCart(){
         //logare
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
@@ -94,10 +97,28 @@ public class AddToCart {
         //navighez la cart
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.cssSelector(".top-link-cart")).click();
-        //click pe remove primul elem
-        String qty = driver.findElement(By.cssSelector("[name=\"cart[20420][qty]\"]")).getText();
-        int inte = Integer.valueOf(qty);
-        System.out.println(inte);
+        //pun in variabila qty ce gasesc in atributul "value" si o transform in int
+        String qty = driver.findElement(By.cssSelector("[name=\"cart[20436][qty]\"]")).getAttribute("value");
+        int qtyInteger = Integer.valueOf(qty);
+        if(qtyInteger > 1){
+        String noulString = String.valueOf(qtyInteger-1);
+        //sterg ce era in atributul value si trimit noul string
+        driver.findElement(By.cssSelector("[name=\"cart[20436][qty]\"]")).clear();
+        driver.findElement(By.cssSelector("[name=\"cart[20436][qty]\"]")).sendKeys(noulString);
+        //dau click pe Update
+        driver.findElement(By.cssSelector("#shopping-cart-table > tbody > tr.last.even > td.product-cart-actions > button")).click();
+        Assert.assertTrue("Cantitatea a fost modificata", qtyInteger !=1);}
+        else Assert.assertTrue("Cantitatea este 1", qtyInteger ==1);
+//        WebElement welcomeTextElement = driver.findElement(By.cssSelector("body > div > div.page > div.main-container.col2-left-layout > div > div.col-main > div.my-account > div > div.welcome-msg > p.hello > strong"));
+//
+//        String expectedText = "Hello, Cosmin Fast!";
+//        String actualText = welcomeTextElement.getText();
+//
+//        if (actualText.equals(expectedText)){
+//            System.out.println("S-a logat cu success!");
+//        }else
+//            System.err.println("Nu s-a logat. ");
+
     }
     @Test
     public void removeAllItemsFromCart(){
@@ -157,6 +178,43 @@ public class AddToCart {
         WebElement ReqFields = driver.findElement(By.cssSelector(".validation-advice"));
         Assert.assertTrue(ReqFields.isDisplayed());
     }
+    @Test
+    public void checkCartLink(){
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+        driver.findElement(By.cssSelector(".header-minicart>a")).click();
+        Assert.assertTrue(driver.findElement(By.id("cart-sidebar")).isDisplayed());
+    }
+    //.cart-link
+    @Test
+    public void checkViewShoppingCartLink(){
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+        driver.findElement(By.cssSelector(".header-minicart>a")).click();
+        driver.findElement(By.cssSelector(".cart-link")).click();
+        String expectedText = "SHOPPING CART";
+        String actualText = driver.findElement(By.cssSelector(".page-title>h1")).getText();
+        Assert.assertEquals(expectedText,actualText);
+    }
+    @Test
+    public void checkCheckOutButtonOnCartDropDown(){
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+        driver.findElement(By.cssSelector(".header-minicart>a")).click();
+        driver.findElement(By.cssSelector(".checkout-button")).click();
+        String expText = "CHECKOUT";
+        String actText = driver.findElement(By.cssSelector(".page-title>h1")).getText();
+        Assert.assertEquals(expText,actText);
+    }
     public void wait(int seconds){
         try{
             Thread.sleep(seconds*1000L);
@@ -165,7 +223,7 @@ public class AddToCart {
         }
     }
     //imi face probleme partea asta, incetineste tot testul la final
-    @After
+    //@After
     public void quit(){
         driver.close();
     }

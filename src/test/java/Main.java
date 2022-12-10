@@ -5,10 +5,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Wait;
 
 public class Main {
-    public static void main(String[] args) {
-    //LoginTest login = new LoginTest();
-   // login.loginWithValidData();
+//    public static void main(String[] args) {
+//    AddToCart cart = new AddToCart();
+//    cart.removeItemFromCartOne();
         //css selector pt required fields "p.required "
-    }
+
 
 }
