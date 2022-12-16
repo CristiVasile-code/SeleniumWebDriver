@@ -49,7 +49,7 @@ public class LoginTest {
         }
     }
 
-    @After
+    //@After
     public void quit(){
         driver.close();
     }

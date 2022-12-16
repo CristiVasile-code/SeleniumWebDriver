@@ -1,4 +1,5 @@
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -57,6 +58,18 @@ public class WishListTests {
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.cssSelector("#header-account > div > ul > li:nth-child(2) > a")).click();
         driver.findElement(By.cssSelector(".cart-cell [title=\"Add to Cart\"]")).click();
+    }
+    @Test
+    public void checkLeftWlLink(){
+        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
+        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
+        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
+        driver.findElement(By.id("pass")).sendKeys("123456");
+        driver.findElement(By.id("send2")).click();
+        driver.findElement(By.cssSelector(".block-content li:nth-child(8)>a")).click();
+        String expText = "MY WISHLIST";
+        String actText  = driver.findElement(By.cssSelector(".page-title>h1")).getText();
+        Assert.assertEquals(expText,actText);
     }
     public void wait(int seconds){
         try{
