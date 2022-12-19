@@ -5,6 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import pages.AccountPage;
+import pages.HomePage;
+import pages.LoginPage;
 
 import java.awt.*;
 import java.util.logging.Logger;
@@ -14,12 +17,18 @@ public class AddToCart {
     Actions actions;
     WebElement mainMenu;
     WebElement subMenu;
+    LoginPage loginPage;
+    HomePage homePage;
+    AccountPage accPage;
     @Before
     public void initDrive(){
         System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("http://testfasttrackit.info/selenium-test/");
+        loginPage = new LoginPage(driver);
+        homePage = new HomePage(driver);
+        accPage = new AccountPage(driver);
     }
     @Test
     public void addToCartN(){
