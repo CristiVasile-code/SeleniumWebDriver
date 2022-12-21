@@ -4,15 +4,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
 import pages.AccountPage;
+import pages.CheckOutPage;
 import pages.HomePage;
 import pages.LoginPage;
 
-import java.awt.*;
-import java.util.logging.Logger;
-
-public class AddToCart {
+public class CartTests {
     WebDriver driver;
     Actions actions;
     WebElement mainMenu;
@@ -20,6 +17,7 @@ public class AddToCart {
     LoginPage loginPage;
     HomePage homePage;
     AccountPage accPage;
+    CheckOutPage checkOutPage;
     @Before
     public void initDrive(){
         System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
@@ -29,16 +27,62 @@ public class AddToCart {
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
         accPage = new AccountPage(driver);
+        checkOutPage = new CheckOutPage(driver);
     }
     @Test
-    public void addToCartN(){
+    public void smokeTest(){
         //logare
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code5@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
+        accPage.setSearchField("tee");
+        //click pe iconul de search
+        accPage.clickSearchIcon();
+        driver.findElement(By.id("product-collection-image-408")).click();
+        driver.findElement(By.id("swatch27")).click();
+        driver.findElement(By.id("swatch80")).click();
+        //driver.findElement(By.id("qty")).clear();
+        //driver.findElement(By.id("qty")).sendKeys("2");
+        driver.findElement(By.cssSelector(".add-to-cart-buttons>button")).click();
+        Assert.assertEquals("Chelsea Tee was added to your shopping cart.", driver.findElement(By.cssSelector(".success-msg span")).getText());
+        checkOutPage.clickCheckOutButton();
+        //
+        driver.findElement(By.id("billing:street1")).sendKeys("Str. Lunga nr.2");
+        driver.findElement(By.id("billing:city")).sendKeys("Galati");
+        driver.findElement(By.id("billing:region_id")).click();
+        driver.findElement(By.cssSelector("#billing\\:region_id > option:nth-child(14)")).click();
+        driver.findElement(By.id("billing:postcode")).sendKeys("800326");
+        driver.findElement(By.id("billing:telephone")).sendKeys("5552365");
+        driver.findElement(By.cssSelector("#billing-buttons-container button")).click();
+        //step 3
+        while(!(driver.findElement(By.id("co-shipping-method-form")).isDisplayed())){
+         wait(1);
+        }
+        //billing:use_for_shipping_yes
 
+        driver.findElement(By.id("s_method_freeshipping_freeshipping")).click();
+//        while(!(driver.findElement(By.id("checkout-shipping-method-load dt")).isDisplayed())){
+//            wait(1);
+//        }
+        driver.findElement(By.cssSelector("[onclick=\"shippingMethod.save()\"]")).click();
+        driver.findElement(By.cssSelector("onclick=\"payment.save()\"")).click();
+       while(!(driver.findElement(By.cssSelector(".btn-checkout")).isDisplayed())){
+            wait(1);
+        }
+        driver.findElement(By.cssSelector(".btn-checkout")).click();
+       Assert.assertEquals("YOUR ORDER HAS BEEN RECEIVED.\n", driver.findElement(By.cssSelector
+               (".page-title h1")).getText());
+    }
+    @Test
+    public void addToCartFromVIPmenu(){
+        //logare
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         driver.findElement(By.cssSelector(".nav-6 a")).click();
         driver.findElement(By.id("product-collection-image-412")).click();
         driver.findElement(By.id("swatch26")).click();
@@ -52,30 +96,24 @@ public class AddToCart {
     }
     @Test
     public void addToCartFromDropDown(){
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
-        //dropdown
-        mainMenu = driver.findElement(By.xpath("//*[@id=\"nav\"]/ol/li[2]/a"));
-//Instantiating Actions class
-         actions = new Actions(driver);
-//Hovering on main menu
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
+        mainMenu = driver.findElement(By.cssSelector(".nav-2>a"));
+        actions = new Actions(driver);
         actions.moveToElement(mainMenu);
-// Locating the element from Sub Menu
-         subMenu = driver.findElement(By.xpath("//*[@id=\"nav\"]/ol/li[2]/ul/li[3]/a"));
-//To mouseover on sub menu
+        subMenu = driver.findElement(By.xpath("//*[@id=\"nav\"]/ol/li[2]/ul/li[3]/a"));
         actions.moveToElement(subMenu);
-//build()- used to compile all the actions into a single step
         actions.click().build().perform();
 
         driver.findElement(By.xpath("//*[@id=\"top\"]/body/div/div[2]/div[2]/div/div[3]/div[3]/ul/li[1]/div/div[2]/a")).click();
         driver.findElement(By.id("swatch17")).click();
         driver.findElement(By.id("swatch80")).click();
         driver.findElement(By.xpath("//*[@id=\"product_addtocart_form\"]/div[3]/div[6]/div[2]/div[2]/button")).click();
-        //Boolean display = driver.findElement(By.cssSelector(".page-title h1")).isDisplayed();
-        //Assert.assertTrue(display);
+
+        //wait(3);
         String expectedText = "SHOPPING CART";
         String actualText = driver.findElement(By.cssSelector(".page-title>h1")).getText();
         Assert.assertEquals(expectedText,actualText);
@@ -83,11 +121,11 @@ public class AddToCart {
     @Test
     public void removeItemFromCartAll(){
         //logare
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         //navighez la cart
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.cssSelector(".top-link-cart")).click();
@@ -98,11 +136,11 @@ public class AddToCart {
     @Test
     public void removeOneItemFromCart(){
         //logare
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         //navighez la cart
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.cssSelector(".top-link-cart")).click();
@@ -122,11 +160,11 @@ public class AddToCart {
     @Test
     public void removeAllItemsFromCart(){
         //logare
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         //navighez la cart
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.cssSelector(".top-link-cart")).click();
@@ -138,15 +176,15 @@ public class AddToCart {
     }
     @Test
     public void addToCartFromSearch(){
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         //scrie "shirt" in search field
-        driver.findElement(By.id("search")).sendKeys("shirt");
+        accPage.setSearchField("shirt");
         //click pe iconul de search
-        driver.findElement(By.cssSelector("[title=\"Search\"]")).click();
+        accPage.clickSearchIcon();
         //click pe primul item
         driver.findElement(By.id("product-collection-image-413")).click();
         //atribute
@@ -161,17 +199,16 @@ public class AddToCart {
     @Test
     public void checkRequiredFields(){
         //logare
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
 
         driver.findElement(By.cssSelector(".nav-6 a")).click();
         driver.findElement(By.id("product-collection-image-412")).click();
         driver.findElement(By.id("swatch26")).click();
         //driver.findElement(By.id("swatch80")).click();
-
         driver.findElement(By.cssSelector(".add-to-cart-buttons>button")).click();
         //verific daca este afisat textul "Required field"
         WebElement ReqFields = driver.findElement(By.cssSelector(".validation-advice"));
@@ -179,22 +216,21 @@ public class AddToCart {
     }
     @Test
     public void checkCartLink(){
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         driver.findElement(By.cssSelector(".header-minicart>a")).click();
         Assert.assertTrue(driver.findElement(By.id("cart-sidebar")).isDisplayed());
     }
-    //.cart-link
     @Test
     public void checkViewShoppingCartLink(){
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         driver.findElement(By.cssSelector(".header-minicart>a")).click();
         driver.findElement(By.cssSelector(".cart-link")).click();
         String expectedText = "SHOPPING CART";
@@ -203,16 +239,17 @@ public class AddToCart {
     }
     @Test
     public void checkCheckOutButtonOnCartDropDown(){
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         driver.findElement(By.cssSelector(".header-minicart>a")).click();
         driver.findElement(By.cssSelector(".checkout-button")).click();
         String expText = "CHECKOUT";
         String actText = driver.findElement(By.cssSelector(".page-title>h1")).getText();
         Assert.assertEquals(expText,actText);
+
     }
     public void wait(int seconds){
         try{
@@ -222,7 +259,7 @@ public class AddToCart {
         }
     }
     //imi face probleme partea asta, incetineste tot testul la final
-    @After
+    //@After
     public void quit(){
         driver.close();
     }

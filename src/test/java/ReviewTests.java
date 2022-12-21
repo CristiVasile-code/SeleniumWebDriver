@@ -6,32 +6,42 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import pages.AccountPage;
+import pages.HomePage;
+import pages.LoginPage;
+import pages.LogoutPage;
 
 public class ReviewTests {
     WebElement mainMenu;
     WebElement subMenu;
     WebDriver driver;
     Actions actions;
+    LoginPage loginPage;
+    HomePage homePage;
+    AccountPage accPage;
+    LogoutPage logoutPage;
     @Before
     public void initDrive(){
         System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("http://testfasttrackit.info/selenium-test/");
+        loginPage = new LoginPage(driver);
+        homePage = new HomePage(driver);
+        accPage = new AccountPage(driver);
+        logoutPage = new LogoutPage(driver);
     }
     @Test
     public void addReview(){
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         mainMenu = driver.findElement(By.cssSelector(".nav-1>a"));
-
         actions = new Actions(driver);
         actions.moveToElement(mainMenu);
         subMenu = driver.findElement(By.cssSelector(".nav-1-2>a"));
-
         actions.moveToElement(subMenu);
         wait(1);
         actions.click().build().perform();

@@ -5,24 +5,34 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import pages.AccountPage;
+import pages.HomePage;
+import pages.LoginPage;
+import pages.LogoutPage;
 
 public class WishListTests {
     WebDriver driver;
+    LoginPage loginPage;
+    HomePage homePage;
+    AccountPage accPage;
+    LogoutPage logoutPage;
     @Before
     public void initDrive(){
         System.setProperty("webdriver.chrome.driver", "resources/chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("http://testfasttrackit.info/selenium-test/");
+        homePage = new HomePage(driver);
+        loginPage = new LoginPage(driver);
     }
     @Test
     public void wishListSale(){
         // logare
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         //apasa pe SALE
         driver.findElement(By.cssSelector(".nav-5>a")).click();
         String title = driver.findElement(By.cssSelector(".page-title h1")).getText();
@@ -36,11 +46,11 @@ public class WishListTests {
     }
     @Test
     public void removeItem(){
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         //wait(1);
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.xpath("//*[@id=\"header-account\"]/div/ul/li[2]/a")).click();
@@ -49,11 +59,11 @@ public class WishListTests {
     }
     @Test
     public void addToCartFromWishlist(){
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         //wait(1);
         driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
         driver.findElement(By.cssSelector("#header-account > div > ul > li:nth-child(2) > a")).click();
@@ -61,11 +71,11 @@ public class WishListTests {
     }
     @Test
     public void checkLeftWlLink(){
-        driver.findElement(By.cssSelector(".account-cart-wrapper>a")).click();
-        driver.findElement(By.cssSelector("a[title=\"Log In\"]")).click();
-        driver.findElement(By.id("email")).sendKeys("cristivasile-code@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("123456");
-        driver.findElement(By.id("send2")).click();
+        homePage.clickAccountButton();
+        homePage.clickLoginLink();
+        loginPage.setEmailField("cristivasile-code@gmail.com");
+        loginPage.setPasswordField("123456");
+        loginPage.clickButton();
         driver.findElement(By.cssSelector(".block-content li:nth-child(8)>a")).click();
         String expText = "MY WISHLIST";
         String actText  = driver.findElement(By.cssSelector(".page-title>h1")).getText();
@@ -78,7 +88,7 @@ public class WishListTests {
             e.printStackTrace();
         }
     }
-    @After
+    //@After
     public void quit(){
         wait(5);
         driver.close();

@@ -30,7 +30,7 @@ public class RegisterTests {
         homePage.clickRegisterLink();
         regPage.setFirstNameField("Vasile");
         regPage.setLastNameField("Cristi");
-        regPage.setEmailAddressField("cristivasile-code4@gmail.com");
+        regPage.setEmailAddressField("cristivasile-code5@gmail.com");
         regPage.setPasswordField("123456");
         regPage.setConfField("123456");
         regPage.clickIsSubscribedRButton();

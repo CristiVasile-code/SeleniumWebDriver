@@ -47,7 +47,7 @@ public class LoginTest {
         loginPage.setPasswordField("123456");
         loginPage.clickButton();
         homePage.clickAccountButton();
-        driver.findElement(By.cssSelector("[title=\"Log Out\"]")).click();
+        homePage.clickLogoutLink();
         Assert.assertEquals("YOU ARE NOW LOGGED OUT",logoutPage.getPageTitle());
     }
     public void wait(int seconds){
